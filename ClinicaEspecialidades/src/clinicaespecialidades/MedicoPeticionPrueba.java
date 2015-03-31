@@ -37,7 +37,7 @@ public class MedicoPeticionPrueba extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         idPaciente = new javax.swing.JTextField();
         botonbuscarpaciente = new javax.swing.JButton();
-        diagnostico = new javax.swing.JTextField();
+        pruebaRequerida = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         nombrePaciente = new javax.swing.JTextField();
@@ -93,6 +93,11 @@ public class MedicoPeticionPrueba extends javax.swing.JFrame {
 
         botonGenerar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         botonGenerar.setText("Generar peticion");
+        botonGenerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonGenerarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,7 +129,7 @@ public class MedicoPeticionPrueba extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(nombrePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(diagnostico, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(pruebaRequerida, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addComponent(jLabel7)
                 .addGap(107, 107, 107))
             .addGroup(layout.createSequentialGroup()
@@ -154,7 +159,7 @@ public class MedicoPeticionPrueba extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(diagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pruebaRequerida, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -180,12 +185,29 @@ public class MedicoPeticionPrueba extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRegresarActionPerformed
 
     private void botonbuscarpacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonbuscarpacienteActionPerformed
-              
+        base = new BaseDatos();
+        nombrePaciente.setText(base.buscarPaciente(idPaciente.getText()));
     }//GEN-LAST:event_botonbuscarpacienteActionPerformed
 
     private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
-       
+       idPaciente.setText("");
+       nombrePaciente.setText("");
+       pruebaRequerida.setText("");
+       fechaActual.setText("");
     }//GEN-LAST:event_botonLimpiarActionPerformed
+
+    private void botonGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGenerarActionPerformed
+        base = new BaseDatos();
+       if(!nombrePaciente.getText().isEmpty()){
+           if(fechaActual.getText().isEmpty() || pruebaRequerida.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Llene los campos de fecha Actual y pruebaa requeridaa");
+            }else{
+           base.peticionPrueba(idPaciente.getText(), fechaActual.getText(),pruebaRequerida.getText());
+           }
+       }else{
+           JOptionPane.showMessageDialog(null, "No se encontró al paciente con el ID proporcionado");
+       }
+    }//GEN-LAST:event_botonGenerarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,7 +250,6 @@ public class MedicoPeticionPrueba extends javax.swing.JFrame {
     private javax.swing.JButton botonLimpiar;
     private javax.swing.JButton botonRegresar;
     private javax.swing.JButton botonbuscarpaciente;
-    private javax.swing.JTextField diagnostico;
     private javax.swing.JTextField fechaActual;
     private javax.swing.JTextField idPaciente;
     private javax.swing.JLabel jLabel1;
@@ -238,5 +259,6 @@ public class MedicoPeticionPrueba extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField nombrePaciente;
+    private javax.swing.JTextField pruebaRequerida;
     // End of variables declaration//GEN-END:variables
 }

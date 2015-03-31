@@ -38,7 +38,7 @@ public class AdministradorModificar extends javax.swing.JFrame {
         idUsuario = new javax.swing.JTextField();
         botonConsultar = new javax.swing.JButton();
         botonLimpiar = new javax.swing.JButton();
-        nombrePaciente = new javax.swing.JTextField();
+        mostrarDatos = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         fechaAlta = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -76,9 +76,14 @@ public class AdministradorModificar extends javax.swing.JFrame {
 
         botonGuardar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         botonGuardar.setText("Guardar");
+        botonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonGuardarActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Usuario:");
+        jLabel2.setText("id Usuario:");
 
         botonConsultar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         botonConsultar.setText("Consultar");
@@ -144,7 +149,7 @@ public class AdministradorModificar extends javax.swing.JFrame {
         });
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel14.setText("Paciente:");
+        jLabel14.setText("Usuario:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -217,7 +222,7 @@ public class AdministradorModificar extends javax.swing.JFrame {
                         .addGap(300, 300, 300))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(151, 151, 151)
-                        .addComponent(nombrePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(mostrarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(80, 80, 80))
         );
         layout.setVerticalGroup(
@@ -231,7 +236,7 @@ public class AdministradorModificar extends javax.swing.JFrame {
                     .addComponent(idUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(nombrePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mostrarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -279,11 +284,42 @@ public class AdministradorModificar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConsultarActionPerformed
+        String idusu = idUsuario.getText();
+        String us = base.buscarUsuario(idusu);
+        mostrarDatos.setText(us);
+       // nombre.setText(base.busacarDatosUsuario(idusu));
+        String [] datos = base.busacarDatosUsuario(idusu);        
+        nombre.setText(datos[0]);
+        aPaterno.setText(datos[1]);
+        aMaterno.setText(datos[2]);
         
+        if ("Administrador".equals(datos[3])) tipoUsuario.setSelectedIndex(4);
+        if("Recepcionista".equals(datos[3])) tipoUsuario.setSelectedIndex(3);
+        if("Laboratorista".equals(datos[3])) tipoUsuario.setSelectedIndex(2);
+        if("Medico".equals(datos[3])) tipoUsuario.setSelectedIndex(1);
+        
+        fechaNacimiento.setText(datos[4]);        
+        fechaAlta.setText(datos[5]);
+        
+        if("Femenino".equals(datos[6])) sexo.setSelectedIndex(1);
+        if ("Masculino".equals(datos[6])) sexo.setSelectedIndex(2);
+        
+        password.setText(datos[7]);
+        usuario.setText(idusu);
     }//GEN-LAST:event_botonConsultarActionPerformed
 
     private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
-        
+        aMaterno.setText("");
+        aPaterno.setText("");
+        fechaAlta.setText("");
+        fechaNacimiento.setText("");
+        idUsuario.setText("");
+        mostrarDatos.setText("");
+        nombre.setText("");
+        password.setText("");
+        sexo.setSelectedIndex(0);
+        tipoUsuario.setSelectedIndex(0);
+        usuario.setText("");
     }//GEN-LAST:event_botonLimpiarActionPerformed
 
     private void sexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sexoActionPerformed
@@ -306,6 +342,20 @@ public class AdministradorModificar extends javax.swing.JFrame {
             setVisible(false);
         }
     }//GEN-LAST:event_botonRegresarActionPerformed
+
+    private void botonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarActionPerformed
+        String apaterno = aPaterno.getText();
+        String amaterno = aMaterno.getText();
+        String nacimiento = fechaNacimiento.getText();
+        String nom = nombre.getText();
+        String alta = fechaAlta.getText();
+        String genero = sexo.getSelectedItem().toString();
+        String tipous = tipoUsuario.getSelectedItem().toString();
+        String pass = password.getText();
+        String usu = usuario.getText();  
+        base.modificarUsuario(apaterno, amaterno, nacimiento, nom, alta, genero, tipous, pass, usu);
+
+    }//GEN-LAST:event_botonGuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -366,8 +416,8 @@ public class AdministradorModificar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField mostrarDatos;
     private javax.swing.JTextField nombre;
-    private javax.swing.JTextField nombrePaciente;
     private javax.swing.JTextField password;
     private javax.swing.JComboBox sexo;
     private javax.swing.JComboBox tipoUsuario;

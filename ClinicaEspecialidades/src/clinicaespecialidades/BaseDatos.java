@@ -300,6 +300,54 @@ public class BaseDatos {
       }
       ll.clear();
     }
+    public void modificarUsuario(String apaterno, String amaterno, String nacimiento, String nom, String alta, String genero,
+        String tipous, String pass, String usu){
+       
+        try {
+            st = con.createStatement();
+            String sql = "UPDATE usuario SET Nombre='"+nom+"',ApellidoPat='"+apaterno+"',ApellidoMat='"+amaterno+"',TipoUsuario='"+tipous+"',FechaNacim='"+nacimiento+"',FechaActual='"+alta+"',Sexo='"+genero+"',password='"+pass+"' "
+                    + "  WHERE idUsuario = '"+usu+"';";
+            
+            st.executeUpdate(sql);
+            JOptionPane.showMessageDialog(null, "Usuario modificado"); 
+        }catch (Exception e) {
+          
+          JOptionPane.showMessageDialog(null, "Usuario no modificado");
+      }
+    }
+    public String [] busacarDatosUsuario(String idusu){
+        
+        String [] datosUsuario = new String[8];
+        try {           
+            st = con.createStatement();           
+            rs = st.executeQuery("SELECT Nombre,ApellidoPat,ApellidoMat,TipoUsuario,FechaNacim,FechaActual,Sexo,Password FROM usuario WHERE idUsuario='"+idusu+"'");
+                        
+            if (rs.next()){
+                datosUsuario[0] = rs.getString("Nombre");
+                datosUsuario[1] = rs.getString("ApellidoPat");
+                datosUsuario[2] = rs.getString("ApellidoMat");
+                datosUsuario[3] = rs.getString("TipoUsuario");
+                datosUsuario[4] = rs.getString("FechaNacim");
+                datosUsuario[5] = rs.getString("FechaActual");
+                datosUsuario[6] = rs.getString("Sexo");
+                datosUsuario[7] = rs.getString("password");
+            }      
+           
+        }catch (Exception e) {          
+          JOptionPane.showMessageDialog(null, "Usuario no Encontrado");        
+      } 
+        return datosUsuario;
+    }
+    public void peticionPrueba(String idPaciente, String fechaSolicitud, String pruebasSolicitadas){
+        try {
+            st = con.createStatement();
+            String sql = "INSERT INTO clinicaespecialidades.analisisclinicos (idPaciente, fechaSolicitud, pruebasSolicitadas) VALUES ('"+idPaciente+"', '"+fechaSolicitud+"', '"+pruebasSolicitadas+"')";
+            st.executeUpdate(sql);
+            JOptionPane.showMessageDialog(null, "Petición generada"); 
+        }catch (Exception e) {
+          JOptionPane.showMessageDialog(null, "La petición no se realizó correctamente");
+      }
+    }
     
 } 
 

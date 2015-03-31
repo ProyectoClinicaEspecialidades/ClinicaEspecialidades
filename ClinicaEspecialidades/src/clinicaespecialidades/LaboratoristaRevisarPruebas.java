@@ -5,6 +5,9 @@
  */
 package clinicaespecialidades;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,12 +40,13 @@ public class LaboratoristaRevisarPruebas extends javax.swing.JFrame {
         idPaciente = new javax.swing.JTextField();
         botonConsultar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        resultados = new javax.swing.JTextArea();
+        pruebas = new javax.swing.JTextArea();
         botonRegresar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         nombrePaciente = new javax.swing.JTextField();
         botonLimpiar = new javax.swing.JButton();
+        fechaRevisar = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,9 +63,9 @@ public class LaboratoristaRevisarPruebas extends javax.swing.JFrame {
             }
         });
 
-        resultados.setColumns(20);
-        resultados.setRows(5);
-        jScrollPane1.setViewportView(resultados);
+        pruebas.setColumns(20);
+        pruebas.setRows(5);
+        jScrollPane1.setViewportView(pruebas);
 
         botonRegresar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         botonRegresar.setText("Regresar");
@@ -90,14 +94,6 @@ public class LaboratoristaRevisarPruebas extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(290, 290, 290)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(idPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(botonConsultar)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,18 +110,30 @@ public class LaboratoristaRevisarPruebas extends javax.swing.JFrame {
                         .addComponent(botonRegresar)
                         .addGap(183, 183, 183)
                         .addComponent(botonLimpiar)
-                        .addGap(300, 300, 300))))
+                        .addGap(300, 300, 300))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(idPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonConsultar)
+                        .addGap(18, 18, 18)
+                        .addComponent(fechaRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(idPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonConsultar))
-                .addGap(36, 36, 36)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(idPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(botonConsultar))
+                    .addComponent(fechaRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(nombrePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -158,13 +166,27 @@ public class LaboratoristaRevisarPruebas extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRegresarActionPerformed
 
     private void botonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConsultarActionPerformed
-      
+        String buscar = buscarFechaBD();        
+        String idpaci = idPaciente.getText();
+        String pa = base.buscarPaciente(idpaci);
+        nombrePaciente.setText(pa);
+        ArrayList array = new ArrayList(base.buscarPacienteDiagnostico(idpaci));
+        for(int i = 0; i<array.size(); i++){
+            pruebas.insert(array.get(i).toString() + "\n", 1);
+        }
     }//GEN-LAST:event_botonConsultarActionPerformed
 
     private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
-        
+        idPaciente.setText("");
+        nombrePaciente.setText("");
     }//GEN-LAST:event_botonLimpiarActionPerformed
-
+    private String buscarFechaBD(){
+        Date fechaBD = fechaRevisar.getDate();
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
+        System.out.println(formato.format(fechaBD));
+        String fecha = formato.format(fechaBD);
+        return fecha;
+    }
     /**
      * @param args the command line arguments
      */
@@ -205,6 +227,7 @@ public class LaboratoristaRevisarPruebas extends javax.swing.JFrame {
     private javax.swing.JButton botonConsultar;
     private javax.swing.JButton botonLimpiar;
     private javax.swing.JButton botonRegresar;
+    private com.toedter.calendar.JDateChooser fechaRevisar;
     private javax.swing.JTextField idPaciente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -212,6 +235,6 @@ public class LaboratoristaRevisarPruebas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nombrePaciente;
-    private javax.swing.JTextArea resultados;
+    private javax.swing.JTextArea pruebas;
     // End of variables declaration//GEN-END:variables
 }
